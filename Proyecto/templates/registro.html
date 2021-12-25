@@ -1,0 +1,142 @@
+{% extends "Base_Index.html" %}
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<!-- Sweet Alert CSS -->
+<link rel="stylesheet" href="{{ url_for('static',filename='css/sweetalert1.css') }}">
+
+<!-- Sweet Alert JS -->
+<script src="{{ url_for('static',filename='js/sweetalert.min1.js') }}"></script>
+<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+
+<script>
+    function matchPassword() {
+        var pw1 = document.getElementById("contra").value;
+        var pw2 = document.getElementById("contra2").value;
+        if (pw1 == pw2) {
+            document.getElementById("contraok").style.display = 'block';
+            document.getElementById("contraokn").style.display = 'none';
+        } else {
+            document.getElementById("contraokn").style.display = 'block';
+            document.getElementById("contraok").style.display = 'none';
+        }
+    }
+    function traeValores(formulario) {
+        // swal("Normal");   			
+        $("form").submit(function (e) {//entro en la funcion submit
+            e.preventDefault();//Desactivo el envio automatico
+
+            $.ajax({
+                url: '/registerUser',
+                type: 'POST',
+                data: {
+                    nombre: formulario.nombre.value,
+                    appaterno: formulario.appaterno.value,
+                    apmaterno: formulario.apmaterno.value,
+                    cel: formulario.cel.value,
+                    contra: formulario.contra.value,
+                    email: formulario.email.value,
+                },
+                cache: false,
+                success: function (response) {
+                    if (response == "Cliente registrado") {
+                        swal({
+                            title: "Registro Exitoso",
+                            text: response,
+                            type: "success"
+                        },
+                            function () {
+                                setTimeout(function () { location.href = "/login"; }, 350);//Esperamos 0.35s para recargar la pagina
+                            });
+                    } else {
+                        swal({
+                            title: "Ocurrio un error",
+                            text: response,
+                            type: "error"
+                        },
+                            function () {
+                                setTimeout(function () { location.href = "/registerUser"; }, 350);//Esperamos 0.35s para recargar la pagina
+                            });
+                    }
+                }
+            })
+
+        });
+    }
+</script>
+<div class="container">
+    <div class="section">
+        <div class="column has-text-centered">
+            <h1 class="title" style="color: ghostwhite;">Registro</h1>
+        </div>
+        <div class="content">
+            <form id="AgregarAdmin" name="AgregarAdmin" method="POST" action="/registerUser">
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label" style="color: rgb(185, 185, 185);">Nombre(s)</label>
+                            <input class="input" id="nombre" type="text" placeholder="Nombre(s)" required>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label" style="color: rgb(185, 185, 185);">Apellido Paterno</label>
+                            <input class="input" id="appaterno" type="text" placeholder="Apellido Paterno" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label" style="color: rgb(185, 185, 185);">Apellido Materno</label>
+                            <input class="input" id="apmaterno" type="text" placeholder="Apellido Materno" required>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label" style="color: rgb(185, 185, 185);">Numero de celular</label>
+                            <input class="input" id="cel" type="number" minlength="10" maxlength="10"
+                                placeholder="Numero de celular" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label" style="color: rgb(185, 185, 185);">Contraseña</label>
+                            <input class="input" id="contra" type="password" placeholder="Contraseña" required>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label" style="color: rgb(185, 185, 185);">Validar contraseña</label>
+                            <input class="input" id="contra2" type="password" onkeyup="matchPassword()"
+                                placeholder="Validar contraseña" required>
+                            <p style="display: none;" id="contraok" class="help is-success">Las contraseñas coinciden.
+                            </p>
+                            <p style="display: none;" id="contraokn" class="help is-danger">Las contraseñas no
+                                coinciden.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" style="color: rgb(185, 185, 185);">Email</label>
+                    <input class="input" id="email" type="email" placeholder="Email" required>
+                </div>
+                <br>
+                <div class="field has-text-centered">
+                    <div class="control">
+                        <button type="submit" class="button is-link" type="submit" id="enviar" name="enviar"
+                            onclick="traeValores(this.form)">Registar</submit>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Termina Seccion1 -->
+{% endblock %}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="utf-8">
+	<title>{% block title %}{% endblock %}</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/bulma.min.css') }}" />
+	<script src="{{ url_for('static',filename='js/7dc3015a44.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/Vue.js')}}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/cards.css') }}">
+
+
+	<link rel="shortcut icon" href="{{ url_for('static',filename='img/icon.png') }}" type="image/x-icon">
+	<link rel="icon" href="{{ url_for('static',filename='img/icon.png') }}" type="image/x-icon">
+</head>
+
+<body onselectstart="return false">
+	<header>
+		<!-- Empieza Menu sin Cuenta-->
+		<nav class="navbar" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item">
+					<img src="{{ url_for('static',filename='img/logobear.png')}}" alt="Logo">
+				</a>
+				<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+					data-target="navbarMenu">
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+				</a>
+			</div>
+			<div id="navbarMenu" class="navbar-menu">
+				<div class="navbar-end">
+					<a href="{{url_for('inicio')}}" class="navbar-item">
+						Inicio
+					</a>
+					<a href="{{url_for('registerUser')}}" class="navbar-item">
+						Registro
+					</a>
+					<a href="{{url_for('login')}}" class="navbar-item">
+						Iniciar sesion
+					</a>
+				</div>
+			</div>
+		</nav>
+		<!-- Termina Menu sin Cuenta-->
+	</header>
+	<main>
+		{% block content %}{% endblock %}
+
+	</main>
+	<footer class="footer">
+		<div class="container">
+			<div class="content has-text-centered">
+				<p>
+					<strong>Ositos uwu / Semestre 2022-1</strong><br />
+					Esquivel Luna Adan<br />
+					Rodriguez Enriquez Miguel Yishay<br />
+					Ramirez Olvera Guillermo<br />
+					Sanchez Mendez Edmundo Josue
+				</p>
+			</div>
+		</div>
+	</footer>
+</body>
+
+</html>

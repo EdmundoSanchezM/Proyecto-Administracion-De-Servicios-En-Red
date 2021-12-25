@@ -1,0 +1,64 @@
+{% extends "Base_Admin.html" %}
+{% block title %}.: Notificaciones :.{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO --><br><br><br>
+        <h2 class="center-align">Notificaciones</h2>
+        <div class="row" style="margin-bottom: 15%; padding: 2%;">              
+            <!-- Timeline -->
+            <article class="col s12">
+                <ul class="timeline">
+
+                    {% if Alertas == 0 %}
+                        <h3 class="center-align">No hay notificaciones</h3>
+                    {% endif %}
+
+                    {% for contador in range(Alertas) %}
+                        {% if contador%2 == 0 %}
+                        <li>
+                            <div class="timeline-badge bg-primary"><i class="zmdi zmdi-device-hub"></i></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h5 class="timeline-title">Router {{datitos[contador][1]}}</h5>
+                                    <p><small class="text-muted"><i class="zmdi zmdi-time"></i> {{datitos[contador][5]}}</small></p>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>{{datitos[contador][4]}}</p>                                    
+                                    {% if datitos[contador][3] == 1%}
+                                        <p style="color: red;">¡Nueva Alerta!</p>
+                                    {% endif %}
+                                    {% if datitos[contador][3] == 2%}
+                                        <p style="color: rgb(110,145,190);">Visto</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if contador%2 != 0 %}                            
+                        <li class="timeline-inverted">
+                            <div class="timeline-badge bg-primary"><i class="zmdi zmdi-device-hub"></i></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h5 class="timeline-title">Router {{datitos[contador][1]}}</h5>
+                                    <p><small class="text-muted"><i class="zmdi zmdi-time"></i> {{datitos[contador][5]}}</small></p>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>{{datitos[contador][4]}}</p>                                    
+                                    {% if datitos[contador][3] == 1%}
+                                        <p style="color: red;">¡Nueva Alerta!</p>
+                                    {% endif %}
+                                    {% if datitos[contador][3] == 2%}
+                                        <p style="color: rgb(110,145,190);">Visto</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}                    
+                    
+                </ul>
+            </article>
+            <!-- Timeline -->         
+        </div>        
+<!-- CONTENIDO -->        
+{% endblock %}

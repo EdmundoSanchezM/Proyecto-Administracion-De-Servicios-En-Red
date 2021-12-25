@@ -1,0 +1,146 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Modifica administrador{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+<script type="text/javascript">
+    function matchPassword() {
+        var pw1 = document.getElementById("contra").value;
+        var pw2 = document.getElementById("contra2").value;
+        if (pw1 == pw2) {
+            document.getElementById("contraok").style.display = 'block';
+            document.getElementById("contraokn").style.display = 'none';
+        } else {
+            document.getElementById("contraokn").style.display = 'block';
+            document.getElementById("contraok").style.display = 'none';
+        }
+    }
+    function modificaUsr(form) {
+        $("form").submit(function (e) {//entro en la funcion submit
+            e.preventDefault();//Desactivo el envio automatico
+            swal({
+                title: "¿Desea modificar al administrador?",
+                text: "El usuario " + form.email.value + " será modificado",
+                type: "warning", //Logo de cuidado :v
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B5F",
+                confirmButtonText: "Si, modificar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false
+            },
+                function () {
+                    $.ajax({
+                        url: '/modificarAdmin',
+                        type: 'POST',
+                        data: {
+                            psw: form.contra.value,
+                            cel: form.cel.value,
+                            ema: form.email.value
+                        },
+                        cache: false,
+                        success: function (response) {
+                            console.log(response);
+                            if (response == "El usuario no existe") {
+                                swal("Error en la actualización", response, "error");
+                            } else {
+                                swal({
+                                    title: "Actualización Exitosa :)",
+                                    text: response,
+                                    type: "success"
+                                },
+                                    function () {
+                                        setTimeout(function () { location.href = "/gestionAdmin"; }, 350);//Esperamos 0.35s para recargar la pagina
+                                    });
+                            }
+                        }
+                    })
+                }
+            );
+
+        });
+    }
+</script>
+{% if filas != None %}
+{% for fila in filas %}
+<div class="container">
+    <div class="section">
+        <div class="column has-text-centered">
+            <h1 class="title">Modifica administrador</h1>
+        </div>
+        <div class="content">
+            <form id="AgregarAdmin" name="AgregarAdmin" method="POST" action="/modificarAdmin">
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Nombre(s)</label>
+                            <input class="input" disabled value="{{fila[1]}}" id="nombre" type="text"
+                                placeholder="Nombre(s)">
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Apellido Paterno</label>
+                            <input class="input" disabled value="{{fila[2]}}" id="appaterno" type="text"
+                                placeholder="Apellido Paterno">
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Apellido Materno</label>
+                            <input class="input" disabled value="{{fila[3]}}" id="apmaterno" type="text"
+                                placeholder="Apellido Materno">
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Numero de celular</label>
+                            <input class="input" value="{{fila[4]}}" id="cel" type="number" minlength="10"
+                                maxlength="10" placeholder="Numero de celular" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Contraseña</label>
+                            <input class="input" id="contra" type="password" placeholder="Contraseña">
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Validar contraseña</label>
+                            <input class="input" id="contra2" type="password" onkeyup="matchPassword()"
+                                placeholder="Validar contraseña">
+                            <p style="display: none;" id="contraok" class="help is-success">Las contraseñas coinciden.
+                            </p>
+                            <p style="display: none;" id="contraokn" class="help is-danger">Las contraseñas no
+                                coinciden.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Email</label>
+                    <input class="input" disabled value="{{fila[0]}}" id="email" type="email" placeholder="Email"
+                        required>
+                </div>
+                <br>
+                <div class="field has-text-centered">
+                    <div class="control">
+                        <button onclick="modificaUsr(this.form);" class="button is-link" type="submit" name="enviar"
+                            id="enviar">Enviar
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </form>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- CONTENIDO -->
+{% endblock %}

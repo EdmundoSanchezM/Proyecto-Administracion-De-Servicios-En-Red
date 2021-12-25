@@ -1,0 +1,104 @@
+{% extends "Base_Index.html" %}
+{% block title %}Ingresar{% endblock %}
+
+{% block content %}
+<!-- Sweet Alert CSS -->
+<link rel="stylesheet" href="{{ url_for('static',filename='css/sweetalert1.css') }}">
+
+<!-- Sweet Alert JS -->
+<script src="{{ url_for('static',filename='js/sweetalert.min1.js') }}"></script>
+<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+
+<script>
+	function traeValores(formulario) {
+		$("form").submit(function (e) {//entro en la funcion submit
+			e.preventDefault();//Desactivo el envio automatico
+			swal({
+				title: "Inicio de sesion",
+				text: "Deseas ingresar con el siguiente correo:  " + formulario.email.value + "  ¿Es correcto?",
+				type: "warning", //Logo de cuidado :v
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B5F",
+				confirmButtonText: "Si, entrar",
+				cancelButtonText: "Cancelar",
+				closeOnConfirm: false
+			},
+				function () {
+					// formulario.submit();
+					$.ajax({
+						url: '/login',
+						type: 'POST',
+						data: {
+							email: formulario.email.value,
+							clave: formulario.contra.value
+						},
+						cache: false,
+						success: function (response) {
+							if (response == "Administrador") {
+								swal({
+									title: "Bienvenid@",
+									text: response,
+									type: "success"
+								},
+									function () {
+										setTimeout(function () { location.href = "/topologia"; }, 350);//Esperamos 0.35s para recargar la pagina
+									});
+							} else if (response == "Cliente") {
+								swal({
+									title: "Bienvenid@",
+									text: response,
+									type: "success"
+								},
+									function () {
+										setTimeout(function () { location.href = "/usr0"; }, 350);//Esperamos 0.35s para recargar la pagina
+									});
+							} else if (response == "Invalido") {
+								swal("Datos incorrectos", response, "error");
+							}
+						}
+					})
+				}
+			);
+
+		});
+	}
+</script>
+<!-- Empieza SeccionLogin -->
+<div class="container">
+	<div class="section">
+		<br>
+				<br>
+				<br>
+				<br>
+				<br>
+		<div class="column has-text-centered">
+			<h1 class="title" style="color: ghostwhite;">Iniciar sesion</h1>
+		</div>
+		<div class="content">
+			<form id="AgregarAdmin" name="AgregarAdmin" method="POST" action="/login">
+				<div class="field">
+					<label class="label" style="color: rgb(185, 185, 185);">Email</label>
+					<input class="input" id="email" type="email" placeholder="Email" required>
+				</div>
+				<div class="field">
+					<label class="label" style="color: rgb(185, 185, 185);">Contraseña</label>
+					<input class="input" id="contra" type="password" placeholder="Contraseña" required>
+				</div>
+				<br>
+				<div class="field has-text-centered">
+					<div class="control">
+						<button type="submit" class="button is-link" type="submit" id="enviar" name="enviar"
+							onclick="traeValores(this.form)">Ingresar</button>
+					</div>
+				</div>
+				
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

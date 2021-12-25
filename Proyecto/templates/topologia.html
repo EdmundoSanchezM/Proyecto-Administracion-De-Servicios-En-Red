@@ -1,0 +1,136 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Topologia{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+<div class="container">
+    <div class="section">
+        <div class="column has-text-centered">
+            <h1 class="title">Opciones red</h1>
+        </div>
+        <div id="app" class="row columns is-multiline">
+            <div class="column">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img style="height:100px; weight:100px" src="{{ url_for('static',filename='img/router.png')}}" alt="Logo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <form method="POST" action="/topologia">
+                            		<input type="hidden" name="opc" id="opc" value="1">
+                                	<button type="submit" class="button is-info">Escanear Red</button>
+                                    <div class="field">
+                                      <label class="label has-text-white">Tiempo de actualizacion en minutos</label>
+                                      <div class="control">
+                                        <input class="input" name="timeER" id="timeER" type="text" placeholder="Tiempo">
+                                      </div>
+                                    </div>
+                            	</form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img style="height:100px; weight:100px" src="{{ url_for('static',filename='img/router.png')}}" alt="Logo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <form method="POST" action="/topologia">
+                            		<input type="hidden" name="opc" id="opc" value="2">
+                                	<button type="submit" class="button is-info">RIP</button>
+                            	</form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img style="height:100px; weight:100px" src="{{ url_for('static',filename='img/router.png')}}" alt="Logo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <form method="POST" action="/topologia">
+                            		<input type="hidden" name="opc" id="opc" value="3">
+                                	<button type="submit" class="button is-info">OSPF</button>
+                            	</form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img style="height:100px; weight:100px" src="{{ url_for('static',filename='img/router.png')}}" alt="Logo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <form method="POST" action="/topologia">
+                            		<input type="hidden" name="opc" id="opc" value="4">
+                                	<button type="submit" class="button is-info">EIGRP</button>
+                            	</form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img style="height:100px; weight:100px" src="{{ url_for('static',filename='img/router.png')}}" alt="Logo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <form method="POST" action="/topologia">
+                            		<input type="hidden" name="opc" id="opc" value="5">
+                                	<button type="submit" class="button is-info">SNMP</button>
+                            	</form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img style="height:100px; weight:100px" src="{{ url_for('static',filename='img/router.png')}}" alt="Logo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <form method="POST" action="/topologia">
+                            		<input type="hidden" name="opc" id="opc" value="6">
+                                	<button type="submit" class="button is-info">Capturar paquetes</button>
+                            	</form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<!-- CONTENIDO -->        
+{% endblock %}

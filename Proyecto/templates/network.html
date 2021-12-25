@@ -1,0 +1,33 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Topologia{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+<script type="text/javascript">
+    function imageExists(){
+        var myLog = new File("/home/edmundojsm/Escritorio/Proyecto/FLASKuwu/static/img/topologia.png");
+         
+        if(myLog.exists()){
+            alert('yay, file exists!');
+        } else {
+            alert('file does not exist!');
+        }
+
+    }
+    window.onload = imageExists
+</script>   
+<div class="container">
+    <div class="section">
+        <div class="column has-text-centered">
+            <h1 class="title" >Topologia detectada</h1>
+        </div>
+        <div class="content">
+            <figure > 
+                <img src="{{ url_for('static',filename='img/topologia.png')}}" alt="topouwu">
+            </figure>
+           
+        </div>
+    </div>
+</div>
+{% endblock %}
+

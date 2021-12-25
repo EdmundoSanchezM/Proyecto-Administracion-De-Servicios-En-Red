@@ -1,0 +1,153 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Crear usuario SSH{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+<script type="text/javascript">
+    function matchPassword() {
+        var pw1 = document.getElementById("contra").value;
+        var pw2 = document.getElementById("contra2").value;
+        if (pw1 == pw2) {
+            document.getElementById("contraok").style.display = 'block';
+            document.getElementById("contraokn").style.display = 'none';
+        } else {
+            document.getElementById("contraokn").style.display = 'block';
+            document.getElementById("contraok").style.display = 'none';
+        }
+    }
+    function modificaUsr(form) {
+        var resp;
+        $("input:checkbox[name=responsable]:checked").each(function () {
+            resp = $(this).val();
+        });
+        $("form").submit(function (e) {//entro en la funcion submit
+            e.preventDefault();//Desactivo el envio automatico
+            swal({
+                title: "¿Desea añadir al usuario?",
+                text: "El usuario " + form.sshusr.value + " será agregado",
+                type: "warning", //Logo de cuidado :v
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B5F",
+                confirmButtonText: "Si, agregar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false
+            },
+                function () {
+                    $.ajax({
+                        url: '/addUsuarioSSH',
+                        type: 'POST',
+                        data: {
+                            psw: form.contra.value,
+                            privilegio: form.Privilegio.value,
+                            nombre: form.sshusr.value,
+                            responsable: resp
+                        },
+                        cache: false,
+                        success: function (response) {
+                            console.log(response);
+                            if (response != "Usuario ssh registrado") {
+                                swal("Error en la actualización", response, "error");
+                            } else {
+                                swal({
+                                    title: "Actualización Exitosa :)",
+                                    text: response,
+                                    type: "success"
+                                },
+                                    function () {
+                                        setTimeout(function () { location.href = "/gestionSSH"; }, 350);//Esperamos 0.35s para recargar la pagina
+                                    });
+                            }
+                        }
+                    })
+                }
+            );
+
+        });
+    }
+</script>
+
+<div class="container">
+    <div class="section">
+        <div class="column has-text-centered">
+            <h1 class="title" >Crear usuario SSH</h1>
+        </div>
+        <div class="content">
+            <form id="AgregarAdmin" name="AgregarAdmin" method="POST" action="/addUsuarioSSH">
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Responsable</label>
+                                <div class="control">
+                                    <fieldset id="checkArray">
+                                        {% if filas != None %}
+                                        {% for fila in (filas) %}
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="responsable" id="{{fila[0]}}" value="{{fila[0]}}">
+                                                {{fila[0]}}
+                                            </label>
+                                            <br\>
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% if filas2 != None %}
+                                        {% for fila in (filas2) %}
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="responsable" id="{{fila[0]}}" value="{{fila[0]}}">
+                                                {{fila[0]}}
+                                            </label>
+                                            <br\>
+                                        {% endfor %}
+                                        {% endif %}
+                                    <fieldset>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Nombre de usuario SSH</label>
+                            <input class="input" id="sshusr" type="text"
+                                placeholder="Nombre usuario ssh">
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Privilegio</label>
+                            <input class="input" id="Privilegio" type="text"
+                                placeholder="Privilegio">
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Contraseña</label>
+                            <input class="input" id="contra" type="password" placeholder="Contraseña">
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="field">
+                            <label class="label">Validar contraseña</label>
+                            <input class="input" id="contra2" type="password" onkeyup="matchPassword()"
+                                placeholder="Validar contraseña">
+                            <p style="display: none;" id="contraok" class="help is-success">Las contraseñas coinciden.
+                            </p>
+                            <p style="display: none;" id="contraokn" class="help is-danger">Las contraseñas no
+                                coinciden.</p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="field has-text-centered">
+                    <div class="control">
+                        <button onclick="modificaUsr(this.form);" class="button is-link" type="submit" name="enviar"
+                            id="enviar">Enviar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- CONTENIDO -->
+{% endblock %}

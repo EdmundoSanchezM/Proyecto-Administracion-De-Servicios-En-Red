@@ -1,0 +1,179 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Dispositivo{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+        <script type="text/javascript">
+        function alertas(form){
+            $("form").submit(function(e){//entro en la funcion submit
+                e.preventDefault();//Desactivo el envio automatico
+                //resto código
+                $.ajax({
+                        url: '/adm411',
+                        type: 'POST',
+                        data: {
+                            idDisp: form.idDisp.value,
+                            email: form.email.value
+                        },
+                        cache:false,
+                        success: function(response){
+                            console.log(response);
+                            swal({
+                                title: "Actualización Exitosa :)",
+                                text: response,
+                                type: "success"
+                            },
+                            function(){
+                                setTimeout(function(){location.href ="/verDispositivos";},350);//Esperamos 0.35s para recargar la pagina
+                            });
+                        }
+                    })
+            });
+        }
+        function modificarRouter(form){
+            $("form").submit(function(e){//entro en la funcion submit
+                e.preventDefault();//Desactivo el envio automatico
+                //resto código
+                $.ajax({
+                        url: '/modRouters',
+                        type: 'POST',
+                        data: {
+                            idDisp: form.idDisp.value,
+                            nombre: form.nombre.value,
+                            loca: form.loc.value,
+                            resp: form.responsable.value
+                        },
+                        cache:false,
+                        success: function(response){
+                            swal({
+                                title: "Actualización Exitosa :)",
+                                text: response,
+                                type: "success"
+                            },
+                            function(){
+                                setTimeout(function(){location.href ="/verDispositivos";},350);//Esperamos 0.35s para recargar la pagina
+                            });
+                        }
+                    })
+            });
+        }
+        
+    </script>
+
+<div class="container">
+    <div class="section">
+        <div class="column has-text-centered">
+            <h1 class="title">{{filas[1]}}</h1>
+        </div>
+        <div class="content has-text-centered">
+            <form id="AgregarAdmin" name="AgregarAdmin" method="POST" action="/modRouters">
+                <div class="columns ">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Sistema</label>
+                            <textarea class="textarea" disabled rows="2">{{filas[2]}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Nombre</label> 
+                            <input class="input" value="{{filas[0]}}" id="idDisp" type="hidden">
+                            <input class="input" value="{{filas[1].partition(".")[0]}}" id="nombre" type="text" placeholder="Localizacion" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Localizacion</label>
+                            <input class="input" value="{{filas[3]}}" id="loc" type="text" placeholder="Localizacion" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Responsable/Contacto</label>
+                            <input class="input" value="{{filas[4]}}" id="responsable" type="text" placeholder="Responsable/Contacto" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="field has-text-centered">
+                    <div class="control">
+                        <button onclick="modificarRouter(this.form);" class="button is-link" type="submit" name="enviar"
+                            id="enviar">Guardar Cambios
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </form>
+        </div>
+        <div class="column has-text-centered">
+            <h1 class="title">Interfaces de {{filas[1].partition(".")[0]}}</h1>
+        </div>
+        <div class="content ">
+           <table class="table">
+            <thead>
+                <tr>
+                    <!-- <th data-field="Email">Email</th> -->
+                    <th data-field="Interfaz">Interfaz</th>
+                    <th data-field="IP">IP</th>
+                    <th data-field="IP">Cantidad de paquetes perdidos permitida (%)</th>
+                    <th data-field="IP">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if allInterfaces != None %}
+                {% for fila in allInterfaces %}
+                <tr>
+                    <td>{{fila[1]}}</td>
+                    <td>{{fila[2]}}</td>
+                    <td>
+                        <form id="uwu2" name="uwu2" method="POST" action="/interfazES">
+                            <input class="input" type="text" name="paq" id="paq" placeholder="Cantidad">
+                    </td>
+                    <td>
+                           <input type="hidden" name="ip" id="ip" value="{{fila[2]}}">
+                            <center>
+                                <button class="button is-success" type="submit" name="enviar" id="enviar">Ver informacion
+                                </button>
+                            </center>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>        
+
+                            
+                           
+                                
+                                {% if filas[8] == 2 %}
+                                <form method="POST" action="/adm411">
+                                    <input type="hidden" name="idDisp" id="idDisp" value="{{filas[0]}}">
+                                    <input type="hidden" name="email" id="email" value="{{email}}">
+                                    <button onclick="alertas(this.form);" class="btn-large blue waves-effect waves-light" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-notifications-active right"></i>Activar Notificaciones
+                                    </button>
+                                </form>
+                                {% endif %}
+
+                                {% if filas[8] == 1 %}
+                                <form method="POST" action="/adm411">
+                                    <input type="hidden" name="idDisp" id="idDisp" value="{{filas[0]}}">
+                                    <input type="hidden" name="email" id="email" value="{{email}}">
+                                    <button onclick="alertas(this.form);" class="btn-large red waves-effect waves-light" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-notifications-off right"></i>Desactivar Notificaciones
+                                    </button>
+                                </form>
+                                {% endif %}
+
+                         
+<!-- CONTENIDO -->
+
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Lista de usuarios SSH{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+<script type="text/javascript">
+    function traeValores(formulario) {
+        $("form").submit(function (e) {//entro en la funcion submit
+            e.preventDefault();//Desactivo el envio automatico
+            console.log(formulario)
+            swal({
+                title: "¿Desea modificar al usuario?",
+                text: "El usuario SSH " + formulario.uwu.value + " será modificado",
+                type: "warning", //Logo de cuidado :v
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B5F",
+                confirmButtonText: "Si, modificar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false
+            },
+                function () {
+                    formulario.submit();
+                }
+            );
+        });
+    }
+    function eliminarAdmin(formulario) {
+        $("form").submit(function (e) {//entro en la funcion submit
+            e.preventDefault();//Desactivo el envio automatico
+            swal({
+                title: "¿Desea borrar al usuario?",
+                text: "El usuario SSH " + formulario.uwu1.value + " será borrado",
+                type: "warning", //Logo de cuidado :v
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B5F",
+                confirmButtonText: "Si, eliminar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false
+            },
+                function () {
+                    $.ajax({
+                        url: '/borrarUsuarioSSH',
+                        type: 'POST',
+                        data: {
+                            ema: formulario.uwu1.value,
+                            psw: formulario.usr1.value
+                        },
+                        cache: false,
+                        success: function (response) {
+                            console.log(response);
+                            if (response == "El usuario no existe") {
+                                swal("Error en la actualización", response, "error");
+                            } else {
+                                swal({
+                                    title: "Usuario SSH eliminado de manera exitosa :)",
+                                    text: response,
+                                    type: "success"
+                                },
+                                    function () {
+                                        setTimeout(function () { location.href = "/gestionSSH"; }, 350);//Esperamos 0.35s para recargar la pagina
+                                    });
+                            }
+                        }
+                    })
+                }
+            );
+
+        });
+    }
+</script>
+<div class="container">
+    <div class="section">
+        <div class="column has-text-centered">
+            <h1 class="title">Lista de usuarios SSH</h1>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <!-- <th data-field="Email">Email</th> -->
+                    <th data-field="Usuario">Email del responsable</th>
+                    <th data-field="Nombre">Privilegio</th>
+                    <th data-field="Apellido1">Nombre de usuario SSH</th>
+                    <th data-field="Modificar">Modificar</th>
+                    <th data-field="Eliminar">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if filas != None %}
+                {% for fila in filas %}
+                <tr>
+                    <form id="ModAdmin" name="ModAdmin" method="POST" action="/modUserSSH">
+                        <input type="hidden" name="usr" id="usr" value="{{fila[0]}}">
+                        <input type="hidden" name="uwu" id="uwu" value="{{fila[3]}}">
+                        <td>{{fila[0]}}</td>
+                        <td>{{fila[2]}}</td>
+                        <td>{{fila[3]}}</td>
+                        <td>
+                            <button class="button is-info" type="submit" name="enviar" id="enviar"
+                                onclick="traeValores(this.form)">&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                    class="zmdi zmdi-edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </td>
+                        <td>
+                            <form id="uwu" name="uwu" method="POST" action="/borrarUsuarioSSH">
+                                <input type="hidden" name="usr1" id="usr1" value="{{fila[1]}}">
+                                <input type="hidden" name="uwu1" id="uwu1" value="{{fila[3]}}">
+                                <button class="button is-danger" type="submit" name="enviar" id="enviar"
+                                    onclick="eliminarAdmin(this.form)">&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                        class="zmdi zmdi-delete"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </button>
+                            </form>
+                        </td>
+                    </form>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- CONTENIDO -->
+{% endblock %}

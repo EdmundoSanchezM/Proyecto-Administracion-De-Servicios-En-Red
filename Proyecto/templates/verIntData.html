@@ -1,0 +1,128 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Informacion de la interfaz{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+function timedRefresh(timeoutPeriod) {
+    
+	setTimeout("location.reload();",timeoutPeriod);
+}
+
+window.onload = timedRefresh(60000);
+</script>
+<div class="container">
+    <div class="section">
+        <h3 class="title is-3">{{ filas[1] }}</h3>
+
+        <h4 class="title is-4">
+            Del router {{ filas[2] }} <input type="hidden" id="router_id">{{ filas[2] }}</p>
+        </h4>
+        <h4 class="title is-4">
+            Dirección IP</h4>
+        <h4 class="subtitle is-4">{{ filas[2] }}</h4>
+
+        <h4 class="title is-4">
+            Máscara de subred</h4>
+        <h4 class="subtitle is-4">{{ filas[4] }}</h4>
+
+        <h4 class="title is-4">
+            Red</h4>
+        <h4 class="subtitle is-4">{{ filas[3] }}</h4>
+
+        <h4 class="title is-4">
+            MTU</h4>
+        <h4 class="subtitle is-4">{{ filas[5] }}</h4>
+        <h4 class="title is-4">
+            Velocidad</h4>
+        <h4 class="subtitle is-4">
+            {{ filas[6] }}
+        </h4>
+        <h4 class="title is-4">
+            Dirección física</h4>
+        <h4 class="subtitle is-4">
+            {{ filas[7] }}
+        </h4>
+        <h4 class="title is-4">
+            Estado administrativo</h4>
+        <h4 class="subtitle is-4">
+            {{ filas[8] }}
+        </h4>
+        <h4 class="title is-4">
+            Estado operacional</h4>
+        <h4 class="subtitle is-4">
+            {{ filas[9] }}
+        </h4>
+
+        <h4 class="title is-4">
+            Grafica paquetes</h4>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+        
+        <h4 class="title is-4">
+            Grafica paquetes dañados</h4>
+        <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+        <div class="grid">
+            <div>
+                <h3 class="text-base font-medium text-gray-700 mt-2 mb-1">
+                    Porcentaje de fallo a travez del tiempo: <span id="percentage_show">{{lostp}}%</span>
+                    </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+var xTiempo = []
+var yPaquetesE = []
+var yPaquetesR = []
+var yPaquetesDE = []
+var yPaquetesDR = []
+{% if uwup != None %}
+{% for fila in uwup %}
+xTiempo.push('{{ fila[6].replace("'","")}}')
+yPaquetesE.push(parseInt('{{ fila[2].replace("'","")}}'))
+yPaquetesR.push(parseInt('{{ fila[3].replace("'","")}}'))
+yPaquetesDE.push(parseInt('{{ fila[4].replace("'","")}}'))
+yPaquetesDR.push(parseInt('{{ fila[5].replace("'","")}}'))
+{% endfor %}
+{% endif %}
+new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: xTiempo,
+    datasets: [{
+      label: 'Paquetes Enviados',
+      fill: true,
+      data: yPaquetesE,
+      borderColor: "red",
+    },{
+      label: 'Paquetes Recibidos',
+      fill: true,
+      data: yPaquetesR,
+      borderColor: "blue",
+    }]
+  }
+});
+new Chart("myChart2", {
+  type: "line",
+  data: {
+    labels: xTiempo,
+    datasets: [{
+      label: 'Paquetes Dañados Enviados',
+      fill: true,
+      data: yPaquetesDE,
+      borderColor: "red",
+    },{
+      label: 'Paquetes Dañados Recibidos',
+      fill: true,
+      data: yPaquetesDR,
+      borderColor: "blue",
+    }]
+  }
+});
+</script>
+
+<!-- CONTENIDO -->
+{% endblock %}

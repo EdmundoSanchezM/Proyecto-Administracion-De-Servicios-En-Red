@@ -1,0 +1,43 @@
+{% extends "Base_Admin.html" %}
+{% block title %}Dispositivos en la red{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->    
+<div class="container">
+    <div class="section">
+        <div class="columns">
+            <div class="column has-text-centered">
+                <h1 class="title">Dispositivos en la red</h1>
+            </div>
+        </div>
+        <div id="app" class="row columns is-multiline">
+            {% if filas != None %}
+            {% for fila in filas %}
+            <div class="column">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img style="height:100px; weight:100px" src="{{ url_for('static',filename='img/router.png')}}" alt="Logo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <form method="POST" action="/adm41">
+                                    <input type="hidden" name="idDisp" id="idDisp" value="{{fila[2]}}">
+                                    <button class="button is-info" type="submit">Informacion de {{fila[1]}}&nbsp;<i
+                                            class="zmdi zmdi-caret-right-circle"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- CONTENIDO -->        
+{% endblock %}
